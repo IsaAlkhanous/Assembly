@@ -1,0 +1,153 @@
+Microsoft (R) Macro Assembler Version 14.42.34436.0	    02/06/25 15:23:58
+example.asm						     Page 1 - 1
+
+
+				; Example assembly language program -- adds two numbers
+				; Author:  R. Detmer
+				; Date:    1/2008
+
+				.586
+				.MODEL FLAT
+
+				INCLUDE io.h            ; header file for input/output
+			      C ; IO.H -- header file for I/O macros (listing suppressed)
+			      C .NOLIST      ; turn off listing
+			      C .LIST        ; begin listing
+			      C 
+
+				.STACK 4096
+
+ 00000000			.DATA
+ 00000000 00000000		var1 DWORD   ?
+ 00000004 00000000		var2 DWORD   ?
+ 00000008 00000000		var3  DWORD  ?
+
+ 0000000C 45 6E 74 65 72	prompt1 BYTE    "Enter var1", 0
+	   20 76 61 72 31
+	   00
+ 00000017 45 6E 74 65 72	prompt2 BYTE    "Enter var2", 0
+	   20 76 61 72 32
+	   00
+ 00000022 45 6E 74 65 72	prompt3 BYTE    "Enter var3", 0
+	   20 76 61 72 33
+	   00
+ 0000002D  00000028 [		string  BYTE    40 DUP (?)
+	    00
+	   ]
+ 00000055 56 61 72 34 20	resultLbl BYTE  "Var4 is", 0
+	   69 73 00
+ 0000005D  0000000B [		var4     DWORD    11 DUP (?), 0
+	    00000000
+	   ] 00000000
+
+ 00000000			.CODE
+ 00000000			_MainProc PROC
+				        input   prompt1, string, 40      ; read ASCII characters
+				        atod    string          ; convert to integer
+ 0000002D  A3 00000000 R	        mov     var1, eax    ; store in memory
+
+				        input   prompt2, string, 40      ; repeat for second number
+				        atod    string
+ 0000005F  A3 00000004 R	        mov     var2, eax
+
+				        input   prompt3, string, 40      ; repeat for third number
+				        atod    string
+ 00000091  A3 00000008 R	        mov     var3, eax
+				        
+				       
+
+				        ; Write your code here
+ 00000096  A1 00000004 R	        mov eax, var2
+ 0000009B  8B 1D 00000008 R	        mov ebx, var3
+ 000000A1  8B 0D 00000000 R	        mov ecx, var1
+ 000000A7  F7 E3		        mul ebx
+ 000000A9  03 C8		        add ecx,eax
+
+ 000000AB  A1 00000004 R	        mov eax, var2
+ 000000B0  BA 00000002		        mov edx, 2
+ 000000B5  F7 E2		        mul edx
+ 000000B7  8B D8		        mov ebx , eax
+ 000000B9  8B C1		        mov eax , ecx
+ 000000BB  F7 F3		        div ebx
+
+ 000000BD  A3 0000005D R	        mov var4 , eax
+				        
+
+
+
+
+				 
+				        dtoa    var4, eax        ; convert to ASCII characters
+				        output  resultLbl, var4          ; output label and sum
+
+ 000000F3  B8 00000000		        mov     eax, 0  ; exit with return code 0
+ 000000F8  C3			        ret
+ 000000F9			_MainProc ENDP
+				END                             ; end of source code
+
+Microsoft (R) Macro Assembler Version 14.42.34436.0	    02/06/25 15:23:58
+example.asm						     Symbols 2 - 1
+
+
+
+
+Macros:
+
+                N a m e                 Type
+
+atod . . . . . . . . . . . . . .	Proc
+atow . . . . . . . . . . . . . .	Proc
+dtoa . . . . . . . . . . . . . .	Proc
+input  . . . . . . . . . . . . .	Proc
+output . . . . . . . . . . . . .	Proc
+wtoa . . . . . . . . . . . . . .	Proc
+
+
+Segments and Groups:
+
+                N a m e                 Size     Length   Align   Combine Class
+
+FLAT . . . . . . . . . . . . . .	GROUP
+STACK  . . . . . . . . . . . . .	32 Bit	 00001000 Para	  Stack	  'STACK'	 
+_DATA  . . . . . . . . . . . . .	32 Bit	 0000008D Para	  Public  'DATA'	
+_TEXT  . . . . . . . . . . . . .	32 Bit	 000000F9 Para	  Public  'CODE'	
+
+
+Procedures, parameters, and locals:
+
+                N a m e                 Type     Value    Attr
+
+_MainProc  . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 000000F9 Public
+
+
+Symbols:
+
+                N a m e                 Type     Value    Attr
+
+@CodeSize  . . . . . . . . . . .	Number	 00000000h   
+@DataSize  . . . . . . . . . . .	Number	 00000000h   
+@Interface . . . . . . . . . . .	Number	 00000000h   
+@Model . . . . . . . . . . . . .	Number	 00000007h   
+@code  . . . . . . . . . . . . .	Text   	 _TEXT
+@data  . . . . . . . . . . . . .	Text   	 FLAT
+@fardata?  . . . . . . . . . . .	Text   	 FLAT
+@fardata . . . . . . . . . . . .	Text   	 FLAT
+@stack . . . . . . . . . . . . .	Text   	 FLAT
+_getInput  . . . . . . . . . . .	L Near	 00000000 FLAT	External
+_showOutput  . . . . . . . . . .	L Near	 00000000 FLAT	External
+atodproc . . . . . . . . . . . .	L Near	 00000000 FLAT	External
+atowproc . . . . . . . . . . . .	L Near	 00000000 FLAT	External
+dtoaproc . . . . . . . . . . . .	L Near	 00000000 FLAT	External
+prompt1  . . . . . . . . . . . .	Byte	 0000000C _DATA	
+prompt2  . . . . . . . . . . . .	Byte	 00000017 _DATA	
+prompt3  . . . . . . . . . . . .	Byte	 00000022 _DATA	
+resultLbl  . . . . . . . . . . .	Byte	 00000055 _DATA	
+string . . . . . . . . . . . . .	Byte	 0000002D _DATA	
+var1 . . . . . . . . . . . . . .	DWord	 00000000 _DATA	
+var2 . . . . . . . . . . . . . .	DWord	 00000004 _DATA	
+var3 . . . . . . . . . . . . . .	DWord	 00000008 _DATA	
+var4 . . . . . . . . . . . . . .	DWord	 0000005D _DATA	
+wtoaproc . . . . . . . . . . . .	L Near	 00000000 FLAT	External
+
+	   0 Warnings
+	   0 Errors
