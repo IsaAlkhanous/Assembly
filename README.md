@@ -42,6 +42,11 @@
 ### Common Instructions
 
 ```assembly
+.DATA
+number1 DWORD 87654321h
+number2 WORD 0ABCDh
+number3 BYTE 0EFh
+
 mov ebx, number1    ; ebx = 87654321h
 movsx bx, number3   ; ebx = 8765FFEFh (sign extend number3)
 xchg bl, bh        ; ebx = 8765EFEFh (swap lower bytes)
@@ -49,9 +54,16 @@ movzx ebx, number2  ; ebx = 0000ABCDh (zero extend number2)
 mov bh, number3     ; ebx = 0000EFCDh (store number3 in bh)
 ```
 
-### Copy Least Significant Byte (LSB)
+###   Q2. Copy Least Significant Byte (LSB)
 
+Write assembly program that copy least significant byte from number1 to number2.
 ```assembly
+.DATA
+number1 DWORD 87654321h
+number2 BYTE ?
+```
+```assembly
+
 ; lab2.asm - copy least significant byte from number1 to number2
 
 .386
@@ -86,6 +98,8 @@ number2 BYTE 21h
 ```
 
 ## Question 3
+Write an assembly program that swaps the values of the two least significant words of two double word 
+numbers
 
 ```assembly
 ; lab2 pt2 - swap least significant words of two double word numbers
@@ -180,7 +194,7 @@ mul cx
 ## Question 3
 Write a complete program that will calculate the following expression and store its value in Z.
 
-\[ Z = \frac{A + B * C}{2 * B} \]
+Z= (A + B * C) / (2 * B)
 
 ```assembly
 .386
