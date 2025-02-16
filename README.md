@@ -6,6 +6,8 @@
 - [Lab 1 - Setup](#lab-1---setup)
 - [Lab 2 - Register Manipulation](#lab-2---register-manipulation)
 - [Lab 3 - Arithmetic Operations](#lab-3---arithmetic-operations)
+- [Lab 4 - Bit Operations](#lab-4---bit-operations)
+
 
 # Cheatsheet
 
@@ -227,4 +229,98 @@ mov ValueZ, eax
 invoke ExitProcess, 0
 main endp
 ```
+
+## Lab 4 - Bit Operations
+
+### Objectives
+**Bit manipulation using XOR, AND, OR, and shifting operations.**
+
+## Question 1A
+Write an assembly program that reverses the high 8 bits of AX and clears the low 5 bits.
+
+```assembly
+; Lab 4 - Q1A: Reverse high 8 bits of AX and clear low 5 bits
+
+.386
+.model flat,stdcall
+.stack 4096
+ExitProcess proto, dwExitCode:dword
+
+.code
+main proc
+    mov ax, 0F0F0h    ; Example initial value
+    xor ax, 0F000h    ; Reverse high 8 bits
+    and ax, 0FFE0h    ; Clear low 5 bits
+    invoke ExitProcess, 0
+main endp
+end main
+```
+
+## Question 1B
+Write an assembly program that reverses the low 8 bits of AX and sets the high 3 bits.
+
+```assembly
+; Lab 4 - Q1B: Reverse low 8 bits of AX and set high 3 bits
+
+.386
+.model flat,stdcall
+.stack 4096
+ExitProcess proto, dwExitCode:dword
+
+.code
+main proc
+    mov ax, 32B3h    ; Load AX with initial value
+    xor ax, 00FFh    ; Reverse the low 8 bits
+    or ax, 0E000h    ; Set high 3 bits
+    invoke ExitProcess, 0
+main endp
+end main
+```
+
+## Question 2B
+Write an assembly program that modifies the value in the `EBX` register in the following sequence:
+1. Reverse all the bits in `BX`.
+2. Clear the lower 3 bits of `BH`.
+3. Set the upper 4 bits in `BL`.
+4. Add the value in the upper 16 bits of `EBX` to the value in the lower 16 bits.
+5. Store the final value in `EAX`.
+
+```assembly
+; Lab 4 - Q2B: Modify EBX in sequence
+
+.386
+.model flat,stdcall
+.stack 4096
+ExitProcess proto, dwExitCode:dword
+
+.data
+number1 DWORD 78CABDEFh
+number2 DWORD 0FFFFFFFFh
+
+.code
+main proc
+    mov ebx, number1   ; Load EBX with number1
+
+    xor ebx, number2   ; 1- Reverse all bits in EBX
+    and bh, 00000111b  ; 2- Clear lower 3 bits of BH
+    or bl, 11110000b   ; 3- Set upper 4 bits in BL
+
+    ; 4- Add the upper 16 bits of EBX to the lower 16 bits
+    mov eax, ebx       ; Store EBX in EAX
+    shr eax, 16        ; Shift right 16 bits to get upper half
+    add bx, ax         ; Add upper 16 to lower 16
+
+    mov eax, ebx       ; 5- Store final result in EAX
+
+    invoke ExitProcess, 0
+main endp
+end main
+```
+
+### Test Cases and Expected Outputs:
+| Input `EBX`        | Expected Output `EAX` |
+|--------------------|----------------------|
+| `0x78CABDEF`      | `0x87358A25`         |
+| `0xA0F25C3D`      | `0x5F0D62FF`         |
+
 
